@@ -1,25 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import useFetch from "./useFetch";
+import Follower from "./Follower";
+import { useState, useEffect } from "react";
 
-function App() {
+const App = () => {
+  const { loading, data } = useFetch();
+  const [page, setPage] = useState(1);
+  const [followers, setFollowers] = useState([]);
+  // use effect
+  useEffect(() => {
+    if (!loading) {
+      setFollowers(data[page]);
+    }
+  }, [loading, page]);
+  // handle page
+  const handlePage = (index) => {
+    setPage(index);
+    // setFollowers(data[index]);
+  };
+  // prev
+  const prevPage = (e) => {
+    setPage((page) => (page === 0 ? data.length - 1 : page - 1));
+  };
+  // next
+  const nextPage = (e) => {
+    setPage((page) => (page === data.length - 1 ? 0 : page + 1));
+  };
+  //  render component
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <div className="section-title">
+        <h1>{loading ? "loading" : "pagination"}</h1>
+        <div className="underline" />
+      </div>
+
+      <section className="followers">
+        <div className="container">
+          {followers.map((follower) => {
+            return <Follower key={follower.id} {...follower} />;
+          })}
+        </div>
+        {!loading && (
+          <div className="btn-container">
+            <button className="prev-btn" onClick={prevPage}>
+              prev
+            </button>
+            {data.map((_, index) => {
+              return (
+                <button
+                  key={index}
+                  className={`page-btn ${index === page ? "active-btn" : ""}`}
+                  onClick={(e) => handlePage(index)}
+                >
+                  {index + 1}
+                </button>
+              );
+            })}
+            <button className="next-btn" onClick={nextPage}>
+              next
+            </button>
+          </div>
+        )}
+      </section>
+    </main>
   );
-}
+};
 
 export default App;
