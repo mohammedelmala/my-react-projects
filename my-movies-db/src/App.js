@@ -1,7 +1,16 @@
-import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import Movie from "./components/Movie";
 
 const App = () => {
-  return <div>App</div>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" index element={<Home />} />
+        <Route path="/movies/:id" element={<Movie />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;
