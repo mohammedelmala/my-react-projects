@@ -49,7 +49,6 @@ export const AppProvider = ({ children }) => {
   };
   //   const
   const handlePage = (value) => {
-    console.log(value);
     dispatch({ type: HANDLE_PAGE, payload: value });
   };
   useEffect(() => {
